@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>User page</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+            crossorigin="anonymous"
+    />
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: solid rgba(0, 0, 0, 0.15);
+            border-width: 1px 0;
+            box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+            inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -0.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/headers.css}" rel="stylesheet"/>
+    <link th:href="@{/css/modals.css}" rel="stylesheet"/>
+</head>
+<body class="body">
+<div th:replace="fragments/index :: header"></div>
+<main class="main-content">
+    <div th:replace="fragments/index :: left-nav(current = 'admin')"></div>
+    <div class="block-content">
+        <h1>Admin panel</h1>
+        <ul class="admin-nav">
+            <li class="admin-nav-item admin-nav-item-usertable admin-nav-item-current">
+                <a href="#"> Users table </a>
+            </li>
+            <li class="admin-nav-item admin-nav-item-newuser">
+                <a href="#"> New User </a>
+            </li>
+        </ul>
+        <div class="add-user-panel">
+            <div class="panel-head">Add new user</div>
+            <div class="panel-body panel-body-adduser">
+                <form class="add-user-form add-user-form-admin" name="addUserAdmin" method="POST" action="/api/admin/adduser">
+                    <div class="mb-3">
+                        <label for="firstname" class="form-label">First name</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="firstname"
+                                aria-describedby="first name"
+                                name="name"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="secondname" class="form-label">Second name</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="secondname"
+                                aria-describedby="second name"
+                                name="surname"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="age"
+                                aria-describedby="age"
+                                name="old"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label"
+                        >Email address</label
+                        >
+                        <input
+                                type="email"
+                                class="form-control"
+                                id="exampleInputEmail1"
+                                aria-describedby="emailHelp"
+                                name="username"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label"
+                        >Password</label
+                        >
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="exampleInputPassword1"
+                                name="password"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select class="form-select add-form-select" id="role" name="role">
+                            <template id="add-form-select-item-template">
+                                <option class="add-form-select-item"></option>
+                            </template>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="user-table admin-panel-current">
+            <div class="panel-head">All users</div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <th>ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    </thead>
+                    <tbody class="user-table-list">
+                    <template id="user-table-item-template">
+                        <tr class="user-table-item">
+                            <td class="user-id"></td>
+                            <td class="user-name"></td>
+                            <td class="user-surname"></td>
+                            <td class="user-old"></td>
+                            <td class="user-username"></td>
+                            <td class="user-stringroles"></td>
+                            <td>
+                                <button
+                                        type="button"
+                                        class="user-button user-edit-button"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                            <td>
+                                <button
+                                        type="button"
+                                        class="user-button user-delete-button"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<div class="modal-body modal-hidden">
+    <form class="add-user-form modal-form" name="editUserForm" method="POST" action="/api/admin/edit/">
+        <div class="mb-3">
+            <label for="id-modal" class="form-label">ID</label>
+            <input
+                    type="text"
+                    class="form-control modal-id"
+                    id="id-modal"
+                    aria-describedby="id"
+                    name="id"
+                    readonly
+            />
+        </div>
+        <div class="mb-3">
+            <label for="firstname-modal" class="form-label">First name</label>
+            <input
+                    type="text"
+                    class="form-control modal-name"
+                    id="firstname-modal"
+                    aria-describedby="first name"
+                    name="name"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="secondname-modal" class="form-label">Second name</label>
+            <input
+                    type="text"
+                    class="form-control modal-surname"
+                    id="secondname-modal"
+                    aria-describedby="second name"
+                    name="surname"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="age-modal" class="form-label">Age</label>
+            <input
+                    type="number"
+                    class="form-control modal-age"
+                    id="age-modal"
+                    aria-describedby="age"
+                    name="old"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1-modal" class="form-label"
+            >Email address</label
+            >
+            <input
+                    type="email"
+                    class="form-control modal-username"
+                    id="exampleInputEmail1-modal"
+                    aria-describedby="emailHelp"
+                    name="username"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1-modal" class="form-label"
+            >Password</label
+            >
+            <input
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword1-modal"
+                    name="password"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="role-modal" class="form-label">Role</label>
+            <select class="form-select" id="role-modal" name="role">
+                <template id="modal-form-select-item-template">
+                    <option class="form-select-item"></option>
+                </template>
+            </select>
+        </div>
+        <button type="button" class="btn btn-primary btn-primary-close">Close</button>
+        <button type="submit" class="btn btn-primary btn-primary-accept">Edit</button>
+    </form>
+</div>
+
+<script th:src="@{/js/currentUser.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body class="body">
+<header class="p-3 text-bg-dark" th:fragment="header">
+  <div class="container">
+    <div
+            class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+    >
+      <div class="header_username"></div>
+      <ul
+              class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 header_username_roles_list"
+      >
+        <template class="header_roles_template">
+          <li class="nav-link px-2 text-white header_username_roles_item"></li>
+        </template>
+
+      </ul>
+
+      <div class="text-end">
+        <form th:action="@{/logout}" th:method="POST">
+          <input class="btn btn-outline-light me-2" type="submit" value="Logout">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="main-content">
+  <div class="block-navigate" th:fragment="left-nav(current)">
+    <ul class="block-navigat-list">
+      <li class="block-navigate-item" sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${current == 'admin'} ? 'block-navigate-item-current' : ''">
+        <a th:href="${current != 'admin' ? '/admin' : '#'}"> Admin </a>
+      </li>
+      <li class="block-navigate-item" th:classappend="${current == 'user'} ? 'block-navigate-item-current' : ''">
+        <a th:href="${current != 'user' ? '/user' : '#'}"> User </a>
+      </li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>
